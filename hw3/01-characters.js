@@ -11,17 +11,17 @@ app.style.width = '100%';
 app.style.margin = '0 auto';
 
 const addCharacterToDom = (character) => {
-  let element = document.createElement('figure');
+  let element = document.createElement('div');
   let Picture = document.createElement('img');
-  let name = document.createElement('figcaption');
-  let title = document.createElement('figcaption');
+  let name = document.createElement('p');
+  let title = document.createElement('p');
 
   element.style.display = 'flex';
   element.style.flexDirection = 'column';
   element.style.alignItems = 'center';
   element.style.width = '25%';
   element.style.margin = '0 auto';
-
+  element.className = 'figure';
   Picture.src = character.imageUrl;
   Picture.alt = character.fullName;
   Picture.width = '100 px';
@@ -30,19 +30,11 @@ const addCharacterToDom = (character) => {
   Picture.style.flexDirection = 'column';
   Picture.style.alignItems = 'center';
   Picture.style.margin = '0 auto';
+  Picture.style.marginTop = '20px';
   Picture.style.width = '20vw';
   Picture.style.height = '20vw';
   name.textContent = character.fullName;
   title.textContent = character.title;
-
-  element.addEventListener('mouseover', (event) => {
-    event.target.style.color = `rgb(255, 255, 255)`;
-    event.target.style.backgroundColor = '#800080';
-  });
-  element.addEventListener('mouseout', (event) => {
-    event.target.style.color = `initial`;
-    event.target.style.backgroundColor = 'initial';
-  });
 
   element.append(Picture);
   element.append(name);

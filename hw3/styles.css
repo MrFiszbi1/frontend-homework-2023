@@ -17,3 +17,8 @@ h1 {
   border-radius: 0.8rem;
   background-color: var(--white);
 }
+
+.figure:hover {
+  background-color: var(--blue);
+  color: var(--white);
+}

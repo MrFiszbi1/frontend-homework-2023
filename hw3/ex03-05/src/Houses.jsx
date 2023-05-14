@@ -3,6 +3,7 @@ import React from "react";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import axios from "axios";
 import { Doughnut } from "react-chartjs-2";
+import { useState} from "react";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -35,7 +36,6 @@ const borderColors = [
 ];
 
 const url = "https://thronesapi.com/api/v2/Characters";
-
 let houseCounter = new Array(10).fill(0);
 const logHouse = (character) => {
   if (
@@ -84,47 +84,50 @@ const logHouse = (character) => {
   }
 };
 
-const fetchData = async (url) => {
-  axios
-    .get(url)
-    .then((response) => response.data)
-    .then((data) => {
-      console.log(data);
-      data.forEach((character) => {
-        logHouse(character);
-      });
-      chartData({
-        labels: [
-          "Targaryen",
-          "Tarly",
-          "Stark",
-          "Baratheon",
-          "Lannister",
-          "Greyjoy",
-          "Tyrell",
-          "lesser House",
-          "Free Folk",
-          "No House"
-        ],
-        datasets: [
-          {
-            label: "The Houses data",
-            data: houseCounter,
-            backgroundColor: backgroundColors,
-            borderColor: borderColors,
-            borderWidth: 1
-          }
-        ]
-      });
-    })
-    .catch(function (error) {
-      // handle error
-      console.log(error);
-    });
-};
-
 export default function Houses() {
+  const [dataFetched, setDataFetched] = useState(false);
+
+  const fetchData = async (url) => {
+    axios
+      .get(url)
+      .then((response) => response.data)
+      .then((data) => {
+        console.log(data);
+        data.forEach((character) => {
+          logHouse(character);
+        });
+        setDataFetched(true);
+      })
+      .catch(function (error) {
+        // handle error
+        console.log(error);
+      });
+  };
   fetchData(url);
 
-  return <Doughnut data={chartData} />;
+  const chartData = {
+    labels: [
+      "Targaryen",
+      "Tarly",
+      "Stark",
+      "Baratheon",
+      "Lannister",
+      "Greyjoy",
+      "Tyrell",
+      "lesser House",
+      "Free Folk",
+      "No House"
+    ],
+    datasets: [
+      {
+        label: "The Houses data",
+        data: houseCounter,
+        backgroundColor: backgroundColors,
+        borderColor: borderColors,
+        borderWidth: 1
+      }
+    ]
+  };
+
+  return dataFetched ? <Doughnut data={chartData} /> : <p>Loading...</p>;
 }
